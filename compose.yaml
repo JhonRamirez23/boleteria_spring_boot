@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: prueba_codesa
+    environment:
+      POSTGRES_DB: prueba
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: Admin1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+volumes:
+  pgdata:
