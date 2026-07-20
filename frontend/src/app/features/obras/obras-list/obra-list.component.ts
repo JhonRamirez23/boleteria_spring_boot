@@ -1,5 +1,5 @@
-import { AuthService } from './../../core/services/auth.service';
-import { ObraService } from './../../core/services/obra.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { ObraService } from '../../../core/services/obra.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Obra } from '../../shared/models/obra.model';
+import { Obra } from '../../../shared/models/obra.model';
 
 @Component({
   selector: 'app-obras-list',
@@ -38,8 +38,8 @@ import { Obra } from '../../shared/models/obra.model';
     MatSnackBarModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './obras-list.component.html',
-  styleUrl: './obras-list.component.scss'
+  templateUrl: './obra-list.component.html',
+  styleUrl: './obra-list.component.scss'
 })
 export class ObrasListComponent implements OnInit {
 

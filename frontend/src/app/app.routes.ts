@@ -27,20 +27,20 @@ export const routes: Routes = [
       {
         path: 'obras',
         loadComponent: () =>
-          import('./features/obras/obras-list.component').then(m => m.ObrasListComponent)
+          import('./features/obras/obras-list/obra-list.component').then(m => m.ObrasListComponent)
       },
-      // {
-      //   path: 'obras/nueva',
-      //   canActivate: [adminGuard],
-      //   loadComponent: () =>
-      //     import('./features/obras/obra-form.component').then(m => m.ObraFormComponent)
-      // },
-      // {
-      //   path: 'obras/editar/:id',
-      //   canActivate: [adminGuard],
-      //   loadComponent: () =>
-      //     import('./features/obras/obra-form.component').then(m => m.ObraFormComponent)
-      // },
+      {
+        path: 'obras/nueva',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/obras/obra-form/obra-form.component').then(m => m.ObraFormComponent)
+      },
+      {
+        path: 'obras/editar/:id',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/obras/obra-form/obra-form.component').then(m => m.ObraFormComponent)
+      },
       // {
       //   path: 'funciones',
       //   loadComponent: () =>
