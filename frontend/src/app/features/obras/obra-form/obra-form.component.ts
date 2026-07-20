@@ -103,8 +103,15 @@ export class ObraFormComponent implements OnInit {
       },
       error: (error) => {
         this.guardando = false;
-        const mensaje = error.error?.mensaje || 'Error al guardar la obra';
-        this.snackBar.open(mensaje, 'Cerrar', { duration: 4000 });
+        let mensaje = 'Error al guardar la obra';
+
+        if (error.error?.detalles && error.error.detalles.length > 0) {
+          mensaje = error.error.detalles.join(', ');
+        } else if (error.error?.mensaje) {
+          mensaje = error.error.mensaje;
+        }
+
+        this.snackBar.open(mensaje, 'Cerrar', { duration: 5000 });
       }
     });
   }

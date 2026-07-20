@@ -1,0 +1,100 @@
+<div class="form-container">
+
+  <div class="page-header">
+    <button mat-icon-button (click)="cancelar()" matTooltip="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-title">
+      <mat-icon>{{ esEdicion ? 'edit' : 'add_circle' }}</mat-icon>
+      <h1>{{ esEdicion ? 'Editar Función' : 'Nueva Función' }}</h1>
+    </div>
+  </div>
+
+  <mat-card class="form-card">
+
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <mat-card-content *ngIf="!loading">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Obra</mat-label>
+          <mat-icon matPrefix>movie</mat-icon>
+          <mat-select formControlName="obraId">
+            <mat-option *ngFor="let obra of obras" [value]="obra.id">
+              {{ obra.titulo }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('obraId')?.hasError('required')">
+            La obra es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha y hora</mat-label>
+          <mat-icon matPrefix>schedule</mat-icon>
+          <input matInput
+                 type="datetime-local"
+                 formControlName="fechaHora"/>
+          <mat-error *ngIf="form.get('fechaHora')?.hasError('required')">
+            La fecha y hora es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Sala</mat-label>
+          <mat-icon matPrefix>room</mat-icon>
+          <input matInput formControlName="sala" placeholder="Sala Principal"/>
+          <mat-error *ngIf="form.get('sala')?.hasError('required')">
+            La sala es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Aforo total</mat-label>
+            <mat-icon matPrefix>people</mat-icon>
+            <input matInput type="number" formControlName="aforoTotal" placeholder="200"/>
+            <mat-error *ngIf="form.get('aforoTotal')?.hasError('required')">
+              El aforo es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('aforoTotal')?.hasError('min')">
+              El aforo debe ser mayor a 0
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Precio (COP)</mat-label>
+            <mat-icon matPrefix>payments</mat-icon>
+            <input matInput type="number" formControlName="precio" placeholder="85000"/>
+            <mat-error *ngIf="form.get('precio')?.hasError('required')">
+              El precio es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('precio')?.hasError('min')">
+              El precio debe ser mayor a 0
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="cancelar()">
+            Cancelar
+          </button>
+          <button mat-flat-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="form.invalid || guardando">
+            <mat-spinner diameter="20" *ngIf="guardando"></mat-spinner>
+            <span *ngIf="!guardando">
+              {{ esEdicion ? 'Actualizar' : 'Crear' }}
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>
