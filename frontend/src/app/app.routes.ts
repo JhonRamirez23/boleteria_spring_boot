@@ -61,11 +61,11 @@ export const routes: Routes = [
           import('./features/funciones/funciones-form/funcion-form.component')
           .then(m => m.FuncionFormComponent)
       },
-      // {
-      //   path: 'reservas',
-      //   loadComponent: () =>
-      //     import('./features/reservas/reservas-list/reservas-list.component').then(m => m.ReservasListComponent)
-      // },
+      {
+        path: 'reservas',
+        loadComponent: () =>
+          import('./features/reservas/reservas-list/reservas-list.component').then(m => m.ReservasListComponent)
+      },
     ]
   },
   {

@@ -3,6 +3,8 @@ package com.codesa.prueba.funciones.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
@@ -15,6 +17,7 @@ public class FuncionRequest {
     @NotNull(message = "El id de la obra es obligatorio")
     private Long obraId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "La fecha y hora es obligatoria")
     @Future(message = "La fecha y hora debe ser futura")
     private LocalDateTime fechaHora;

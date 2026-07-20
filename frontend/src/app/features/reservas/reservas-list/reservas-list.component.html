@@ -1,0 +1,135 @@
+<div class="reservas-container">
+
+  <div class="page-header">
+    <div class="header-title">
+      <mat-icon>confirmation_number</mat-icon>
+      <h1>{{ isAdmin ? 'Gestión de Reservas' : 'Mis Reservas' }}</h1>
+    </div>
+  </div>
+
+  <mat-card class="filter-card" *ngIf="isAdmin">
+    <mat-form-field appearance="outline" class="estado-select">
+      <mat-label>Filtrar por estado</mat-label>
+      <mat-icon matPrefix>filter_list</mat-icon>
+      <mat-select [(ngModel)]="filtroEstado" (ngModelChange)="onFiltroChange()">
+        <mat-option *ngFor="let estado of estados" [value]="estado.valor">
+          {{ estado.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+
+  <mat-card class="table-card">
+
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+      <table mat-table [dataSource]="dataSource" class="reservas-table">
+
+        <ng-container matColumnDef="obra">
+          <th mat-header-cell *matHeaderCellDef>Obra</th>
+          <td mat-cell *matCellDef="let reserva">
+            <div class="obra-cell">
+              <span class="obra-titulo">{{ reserva.obraTitulo }}</span>
+              <span class="usuario" *ngIf="isAdmin">{{ reserva.usuarioEmail }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaFuncion">
+          <th mat-header-cell *matHeaderCellDef>Fecha Función</th>
+          <td mat-cell *matCellDef="let reserva">
+            <div class="fecha-cell">
+              <mat-icon>schedule</mat-icon>
+              {{ reserva.fechaFuncion }}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sala">
+          <th mat-header-cell *matHeaderCellDef>Sala</th>
+          <td mat-cell *matCellDef="let reserva">{{ reserva.sala }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cantidad">
+          <th mat-header-cell *matHeaderCellDef>Boletas</th>
+          <td mat-cell *matCellDef="let reserva">
+            <div class="cantidad-cell">
+              <mat-icon>confirmation_number</mat-icon>
+              {{ reserva.cantidad }}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let reserva">
+            <mat-chip class="chip-precio">
+              {{ formatearPrecio(reserva.total) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let reserva">
+            <mat-chip [class]="getEstadoClass(reserva.estado)">
+              {{ reserva.estado }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let reserva">
+            <div class="acciones">
+              <ng-container *ngIf="isAdmin && reserva.estado === 'PENDIENTE'">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="confirmar(reserva)"
+                        matTooltip="Confirmar">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="rechazar(reserva)"
+                        matTooltip="Rechazar">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!isAdmin && reserva.estado === 'PENDIENTE'">
+                <button mat-icon-button
+                        color="warn"
+                        (click)="cancelar(reserva)"
+                        matTooltip="Cancelar reserva">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+            No hay reservas disponibles
+          </td>
+        </tr>
+
+      </table>
+
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </mat-card>
+</div>
