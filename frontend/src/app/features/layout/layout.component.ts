@@ -32,11 +32,11 @@ export class LayoutComponent {
   sidenavOpen = true;
   usuario = this.authService.getUsuario();
 
-  menuItems = [
-    { label: 'Obras', icon: 'movie', route: '/obras', adminOnly: false },
-    { label: 'Funciones', icon: 'event', route: '/funciones', adminOnly: false },
-    { label: 'Mis Reservas', icon: 'confirmation_number', route: '/reservas', adminOnly: false },
-    { label: 'Gestión de Reservas', icon: 'admin_panel_settings', route: '/reservas/admin', adminOnly: true }
+  menuItems: { label: string, icon: string, route: string, adminOnly: boolean, userOnly: boolean }[] = [
+    { label: 'Obras', icon: 'movie', route: '/obras', adminOnly: false, userOnly: false },
+    { label: 'Funciones', icon: 'event', route: '/funciones', adminOnly: false, userOnly: false },
+    { label: 'Mis Reservas', icon: 'confirmation_number', route: '/reservas', adminOnly: false, userOnly: true },
+    { label: 'Gestión de Reservas', icon: 'admin_panel_settings', route: '/reservas/admin', adminOnly: true, userOnly: false }
   ];
 
   constructor(private authService: AuthService) {}
@@ -46,7 +46,11 @@ export class LayoutComponent {
   }
 
   get itemsVisibles() {
-    return this.menuItems.filter(item => !item.adminOnly || this.isAdmin);
+    return this.menuItems.filter(item => {
+      if (item.adminOnly && !this.isAdmin) return false;
+      if (item.userOnly && this.isAdmin) return false;
+      return true;
+    });
   }
 
   logout(): void {

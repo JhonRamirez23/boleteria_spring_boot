@@ -70,11 +70,16 @@ export class ReservasListComponent implements OnInit {
   cargarReservas(): void {
     this.loading = true;
 
-    const servicio = this.isAdmin && this.filtroEstado
-      ? this.reservaService.listarPorEstado(this.filtroEstado, this.currentPage, this.pageSize)
-      : this.isAdmin
-        ? this.reservaService.listarPorEstado('PENDIENTE', this.currentPage, this.pageSize)
-        : this.reservaService.misReservas(this.currentPage, this.pageSize);
+    let servicio;
+
+    if (!this.isAdmin) {
+      servicio = this.reservaService.misReservas(this.currentPage, this.pageSize);
+    } else if (this.filtroEstado === '') {
+      servicio = this.reservaService.listarTodas(this.currentPage, this.pageSize);
+    } else {
+      servicio = this.reservaService.listarPorEstado(
+        this.filtroEstado, this.currentPage, this.pageSize);
+    }
 
     servicio.subscribe({
       next: (response) => {
