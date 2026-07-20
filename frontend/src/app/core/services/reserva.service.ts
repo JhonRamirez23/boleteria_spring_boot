@@ -14,6 +14,11 @@ export class ReservaService {
 
   constructor(private http: HttpClient) {}
 
+  listarTodas(page: number = 0, size: number = 10): Observable<PageResponse<Reserva>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<PageResponse<Reserva>>(this.apiUrl, { params });
+  }
+
   misReservas(page: number = 0, size: number = 10): Observable<PageResponse<Reserva>> {
     const params = new HttpParams().set('page', page).set('size', size);
     return this.http.get<PageResponse<Reserva>>(`${this.apiUrl}/mis-reservas`, { params });

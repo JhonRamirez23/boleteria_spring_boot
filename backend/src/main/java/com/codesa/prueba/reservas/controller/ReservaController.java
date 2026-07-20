@@ -46,6 +46,13 @@ public class ReservaController {
                 reservaService.listarMisReservas(userDetails.getUsername(), pageable));
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<ReservaResponse>> listarTodas(
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(reservaService.listarTodas(pageable));
+    }
+
     @GetMapping("/funcion/{funcionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ReservaResponse>> listarPorFuncion(

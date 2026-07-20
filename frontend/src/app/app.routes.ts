@@ -64,7 +64,15 @@ export const routes: Routes = [
       {
         path: 'reservas',
         loadComponent: () =>
-          import('./features/reservas/reservas-list/reservas-list.component').then(m => m.ReservasListComponent)
+          import('./features/reservas/reservas-list/reservas-list.component')
+          .then(m => m.ReservasListComponent)
+      },
+      {
+        path: 'reservas/admin',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/reservas/reservas-list/reservas-list.component')
+          .then(m => m.ReservasListComponent)
       },
     ]
   },

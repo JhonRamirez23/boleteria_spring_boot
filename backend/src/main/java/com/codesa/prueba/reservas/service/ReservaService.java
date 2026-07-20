@@ -23,82 +23,87 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class ReservaService {
+        private final ReservaRepository reservaRepository;
+        private final FuncionRepository funcionRepository;
+        private final UsuarioRepository usuarioRepository;
+        private final ReservaValidacionService validacionService;
 
-    private final ReservaRepository reservaRepository;
-    private final FuncionRepository funcionRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final ReservaValidacionService validacionService;
+        @Transactional
+        public ReservaResponse crear(ReservaRequest request, String email) {
+                log.info("Creando reserva para usuario: {} en función: {}",
+                                email, request.getFuncionId());
 
-    @Transactional
-    public ReservaResponse crear(ReservaRequest request, String email) {
-        log.info("Creando reserva para usuario: {} en función: {}",
-                email, request.getFuncionId());
+                Usuario usuario = usuarioRepository.findByEmail(email)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Usuario no encontrado: " + email));
 
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Usuario no encontrado: " + email));
+                Funcion funcion = funcionRepository.findById(request.getFuncionId())
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Función no encontrada con id: " + request.getFuncionId()));
 
-        Funcion funcion = funcionRepository.findById(request.getFuncionId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Función no encontrada con id: " + request.getFuncionId()));
+                validacionService.validarReservaduplicada(usuario.getId(), funcion.getId());
+                validacionService.validarAforo(funcion.getId(), request.getCantidad());
 
-        validacionService.validarReservaduplicada(usuario.getId(), funcion.getId());
-        validacionService.validarAforo(funcion.getId(), request.getCantidad());
+                Reserva reserva = Reserva.builder()
+                                .usuario(usuario)
+                                .funcion(funcion)
+                                .cantidad(request.getCantidad())
+                                .estado(EstadoReserva.PENDIENTE)
+                                .build();
 
-        Reserva reserva = Reserva.builder()
-                .usuario(usuario)
-                .funcion(funcion)
-                .cantidad(request.getCantidad())
-                .estado(EstadoReserva.PENDIENTE)
-                .build();
+                return toResponse(reservaRepository.save(reserva));
+        }
 
-        return toResponse(reservaRepository.save(reserva));
-    }
+        @Transactional(readOnly = true)
+        public Page<ReservaResponse> listarMisReservas(String email, Pageable pageable) {
+                log.info("Listando reservas del usuario: {}", email);
+                Usuario usuario = usuarioRepository.findByEmail(email)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Usuario no encontrado: " + email));
+                return reservaRepository.findByUsuarioId(usuario.getId(), pageable)
+                                .map(this::toResponse);
+        }
 
-    @Transactional(readOnly = true)
-    public Page<ReservaResponse> listarMisReservas(String email, Pageable pageable) {
-        log.info("Listando reservas del usuario: {}", email);
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Usuario no encontrado: " + email));
-        return reservaRepository.findByUsuarioId(usuario.getId(), pageable)
-                .map(this::toResponse);
-    }
+        @Transactional(readOnly = true)
+        public Page<ReservaResponse> listarTodas(Pageable pageable) {
+                log.info("Listando todas las reservas");
+                return reservaRepository.findAll(pageable).map(this::toResponse);
+        }
 
-    @Transactional(readOnly = true)
-    public Page<ReservaResponse> listarPorFuncion(Long funcionId, Pageable pageable) {
-        log.info("Listando reservas de función id: {}", funcionId);
-        return reservaRepository.findByFuncionId(funcionId, pageable)
-                .map(this::toResponse);
-    }
+        @Transactional(readOnly = true)
+        public Page<ReservaResponse> listarPorFuncion(Long funcionId, Pageable pageable) {
+                log.info("Listando reservas de función id: {}", funcionId);
+                return reservaRepository.findByFuncionId(funcionId, pageable)
+                                .map(this::toResponse);
+        }
 
-    @Transactional(readOnly = true)
-    public Page<ReservaResponse> listarPorEstado(EstadoReserva estado, Pageable pageable) {
-        log.info("Listando reservas con estado: {}", estado);
-        return reservaRepository.findByEstado(estado, pageable)
-                .map(this::toResponse);
-    }
+        @Transactional(readOnly = true)
+        public Page<ReservaResponse> listarPorEstado(EstadoReserva estado, Pageable pageable) {
+                log.info("Listando reservas con estado: {}", estado);
+                return reservaRepository.findByEstado(estado, pageable)
+                                .map(this::toResponse);
+        }
 
-    public Reserva findReservaOrThrow(Long id) {
-        return reservaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Reserva no encontrada con id: " + id));
-    }
+        public Reserva findReservaOrThrow(Long id) {
+                return reservaRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Reserva no encontrada con id: " + id));
+        }
 
-    public ReservaResponse toResponse(Reserva reserva) {
-        return ReservaResponse.builder()
-                .id(reserva.getId())
-                .funcionId(reserva.getFuncion().getId())
-                .obraTitulo(reserva.getFuncion().getObra().getTitulo())
-                .sala(reserva.getFuncion().getSala())
-                .fechaFuncion(reserva.getFuncion().getFechaHora())
-                .cantidad(reserva.getCantidad())
-                .precioUnitario(reserva.getFuncion().getPrecio())
-                .total(reserva.getFuncion().getPrecio()
-                        .multiply(BigDecimal.valueOf(reserva.getCantidad())))
-                .estado(reserva.getEstado())
-                .fechaReserva(reserva.getFechaReserva())
-                .usuarioEmail(reserva.getUsuario().getEmail())
-                .build();
-    }
+        public ReservaResponse toResponse(Reserva reserva) {
+                return ReservaResponse.builder()
+                                .id(reserva.getId())
+                                .funcionId(reserva.getFuncion().getId())
+                                .obraTitulo(reserva.getFuncion().getObra().getTitulo())
+                                .sala(reserva.getFuncion().getSala())
+                                .fechaFuncion(reserva.getFuncion().getFechaHora())
+                                .cantidad(reserva.getCantidad())
+                                .precioUnitario(reserva.getFuncion().getPrecio())
+                                .total(reserva.getFuncion().getPrecio()
+                                                .multiply(BigDecimal.valueOf(reserva.getCantidad())))
+                                .estado(reserva.getEstado())
+                                .fechaReserva(reserva.getFechaReserva())
+                                .usuarioEmail(reserva.getUsuario().getEmail())
+                                .build();
+        }
 }
