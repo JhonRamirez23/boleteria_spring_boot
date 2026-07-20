@@ -41,11 +41,26 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/obras/obra-form/obra-form.component').then(m => m.ObraFormComponent)
       },
-      // {
-      //   path: 'funciones',
-      //   loadComponent: () =>
-      //     import('./features/funciones/funciones-list/funciones-list.component').then(m => m.FuncionesListComponent)
-      // },
+      {
+        path: 'funciones',
+        loadComponent: () =>
+          import('./features/funciones/funciones-list/funcion-list.component')
+          .then(m => m.FuncionesListComponent)
+      },
+      {
+        path: 'funciones/nueva',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/funciones/funciones-form/funcion-form.component')
+          .then(m => m.FuncionFormComponent)
+      },
+      {
+        path: 'funciones/editar/:id',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/funciones/funciones-form/funcion-form.component')
+          .then(m => m.FuncionFormComponent)
+      },
       // {
       //   path: 'reservas',
       //   loadComponent: () =>
