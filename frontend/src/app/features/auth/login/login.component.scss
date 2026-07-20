@@ -1,0 +1,121 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+
+  background:
+    radial-gradient(circle at top right, #7c4dff22 0%, transparent 30%),
+    radial-gradient(circle at bottom left, #9575cd22 0%, transparent 35%),
+    linear-gradient(135deg, #2e1065, #4527a0);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .20);
+  backdrop-filter: blur(12px);
+  transition: .25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36px;
+  text-align: center;
+
+  .logo-wrapper {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #7c4dff, #9575cd
+    );
+
+    box-shadow: 0 12px 30px rgba(124,77,255,.35);
+
+    mat-icon {
+      color:white;
+      width:40px;
+      height:40px;
+      font-size:40px;
+    }
+  }
+
+  h1 {
+    margin:0;
+    font-size:1.7rem;
+    font-weight:700;
+    letter-spacing:.3px;
+  }
+
+  p {
+    margin-top:10px;
+    color:#757575;
+    font-size:.95rem;
+  }
+}
+
+.full-width {
+  width:100%;
+}
+
+mat-form-field {
+  width:100%;
+  margin-bottom:10px;
+}
+
+.login-btn {
+  margin-top:20px;
+  height:52px;
+  border-radius:14px;
+  font-size:1rem;
+  font-weight:600;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  transition:.2s;
+
+  &:not(:disabled) {
+    box-shadow:0 8px 20px rgba(124,77,255,.30);
+  }
+}
+
+mat-spinner {
+  margin:auto;
+}
+
+@media (max-width:600px) {
+  .login-card{
+    padding:28px;
+    border-radius:18px;
+  }
+  .login-header {
+    margin-bottom:28px;
+    .logo-wrapper {
+      width:68px;
+      height:68px;
+      mat-icon {
+        font-size:34px;
+        width:34px;
+        height:34px;
+      }
+    }
+
+    h1 {
+      font-size:1.45rem;
+    }
+  }
+}
