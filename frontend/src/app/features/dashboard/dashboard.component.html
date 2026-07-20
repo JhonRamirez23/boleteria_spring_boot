@@ -1,0 +1,78 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav [opened]="sidenavOpen" mode="side" class="sidenav">
+    <div class="sidenav-header">
+      <div class="logo-wrapper">
+        <mat-icon>theater_comedy</mat-icon>
+      </div>
+      <span class="app-name">Boletería</span>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <a mat-list-item
+        *ngFor="let item of itemsVisibles"
+        [routerLink]="item.route"
+        routerLinkActive="active-link"
+        class="nav-item"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider></mat-divider>
+      <div class="user-info">
+        <mat-icon>account_circle</mat-icon>
+        <div class="user-details">
+          <span class="user-email">{{ usuario?.email }}</span>
+          <span class="user-rol">{{ usuario?.rol }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <mat-toolbar class="toolbar">
+      <button mat-icon-button (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">Sistema de Boletería</span>
+      <span class="spacer"></span>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Cerrar sesión
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content-area">
+      <div class="welcome-card">
+        <div class="welcome-icon">
+          <mat-icon>theater_comedy</mat-icon>
+        </div>
+        <h2>Bienvenido, {{ usuario?.email }}</h2>
+        <p>Selecciona una opción del menú para comenzar</p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <mat-icon>movie</mat-icon>
+            <span>Obras</span>
+          </div>
+          <div class="stat-card">
+            <mat-icon>event</mat-icon>
+            <span>Funciones</span>
+          </div>
+          <div class="stat-card">
+            <mat-icon>confirmation_number</mat-icon>
+            <span>Reservas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
