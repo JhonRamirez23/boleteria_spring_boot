@@ -1,0 +1,652 @@
+{
+  "info": {
+    "_postman_id": "7342031d-c0e4-4759-91a0-bc4252f72299",
+    "name": "Prueba Codesa",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51058834",
+    "_collection_link": "https://go.postman.co/collection/51058834-7342031d-c0e4-4759-91a0-bc4252f72299?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login ADMIN",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login exitoso\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.environment.set('token_admin', response.token);\r",
+                  "    console.log('Token ADMIN guardado');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@codesa.com\",\r\n    \"password\": \"Admin1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login USER",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login exitoso\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.environment.set('token_user', response.token);\r",
+                  "    console.log('Token USER guardado');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"user@codesa.com\",\r\n    \"password\": \"User1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Obras",
+      "item": [
+        {
+          "name": "Listar obras (Público)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/obras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lista obras (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/obras/admin",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras",
+                "admin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener obra por ID (público)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/obras/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear obra (admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El lago de los cisnes\",\r\n    \"descripcion\": \"Ballet clásico de Tchaikovsky\",\r\n    \"genero\": \"Ballet\",\r\n    \"duracionMinutos\": 130,\r\n    \"activa\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/obras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar obra (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"Romeo y Julieta\",\r\n    \"descripcion\": \"La tragedia por excelencia sobre el amor prohibido\",\r\n    \"genero\": \"Dramático - Musical\",\r\n    \"duracionMinutos\": 180,\r\n    \"activa\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/obras/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar obra (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/obras/4",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "obras",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Funciones",
+      "item": [
+        {
+          "name": "Listar funciones por obra",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/funciones/obra/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "funciones",
+                "obra",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener función por ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/funciones/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "funciones",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear función (admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"obraId\": 5,\r\n    \"fechaHora\": \"2026-09-15 20:00:00\",\r\n    \"sala\": \"Sala Principal\",\r\n    \"aforoTotal\": 150,\r\n    \"precio\": 95000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/funciones",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "funciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar función (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"obraId\": 1,\r\n    \"fechaHora\": \"2026-08-20 20:00:00\",\r\n    \"sala\": \"Sala Principal\",\r\n    \"aforoTotal\": 200,\r\n    \"precio\": 85000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/funciones/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "funciones",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar función (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"obraId\": 1,\r\n    \"fechaHora\": \"2026-08-20 20:00:00\",\r\n    \"sala\": \"Sala Principal\",\r\n    \"aforoTotal\": 200,\r\n    \"precio\": 85000.00\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/funciones/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "funciones",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Crear reserva",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_user}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"funcionId\": 8,\r\n    \"cantidad\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mis reservas (user)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_user}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/mis-reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "mis-reservas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todas (admin)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por estado",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/estado/PENDIENTE",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "estado",
+                "PENDIENTE"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por función",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/funcion/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "funcion",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirmar reserva",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/7/confirmar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "7",
+                "confirmar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rechazar reserva",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/8/rechazar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "8",
+                "rechazar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar reserva",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_user}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/9/cancelar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reservas",
+                "9",
+                "cancelar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token_admin}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
