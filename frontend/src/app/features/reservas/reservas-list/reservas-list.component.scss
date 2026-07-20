@@ -1,0 +1,145 @@
+.reservas-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: #7c4dff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2e1065;
+    }
+  }
+}
+
+.filter-card {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  margin-bottom: 16px;
+
+  .estado-select {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.table-card {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.reservas-table {
+  width: 100%;
+}
+
+.obra-cell {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+
+  .obra-titulo {
+    font-weight: 600;
+    color: #2e1065;
+  }
+
+  .usuario {
+    font-size: 0.75rem;
+    color: #757575;
+  }
+}
+
+.fecha-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4527a0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.cantidad-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4527a0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.acciones {
+  display: flex;
+  gap: 4px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px;
+  color: #757575;
+}
+
+::ng-deep {
+  .chip-pendiente {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+    font-weight: 600 !important;
+  }
+
+  .chip-confirmada {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    font-weight: 600 !important;
+  }
+
+  .chip-rechazada {
+    background-color: #fce4ec !important;
+    color: #c62828 !important;
+    font-weight: 600 !important;
+  }
+
+  .chip-cancelada {
+    background-color: #f5f5f5 !important;
+    color: #616161 !important;
+    font-weight: 600 !important;
+  }
+
+  .chip-precio {
+    background-color: #ede7f6 !important;
+    color: #4527a0 !important;
+    font-weight: 600 !important;
+  }
+}

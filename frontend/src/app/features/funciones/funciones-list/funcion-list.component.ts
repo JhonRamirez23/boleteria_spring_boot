@@ -18,6 +18,8 @@ import { ObraService } from '../../../core/services/obra.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Funcion } from '../../../shared/models/funcion.model';
 import { Obra } from '../../../shared/models/obra.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ReservaDialogComponent } from '../../reservas/reserva-dialog/reserva-dialog.component';
 
 @Component({
   selector: 'app-funciones-list',
@@ -55,7 +57,8 @@ export class FuncionesListComponent implements OnInit {
     private funcionService: FuncionService,
     private obraService: ObraService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   get isAdmin(): boolean {
@@ -114,6 +117,19 @@ export class FuncionesListComponent implements OnInit {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.cargarFunciones();
+  }
+
+  reservar(funcion: Funcion): void {
+    const dialogRef = this.dialog.open(ReservaDialogComponent, {
+      data: funcion,
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.cargarFunciones();
+      }
+    });
   }
 
   eliminar(funcion: Funcion): void {

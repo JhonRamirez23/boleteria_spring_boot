@@ -25,6 +25,7 @@ public class FuncionService {
     private final FuncionRepository funcionRepository;
     private final ObraRepository obraRepository;
 
+    @Transactional(readOnly = true)
     public Page<FuncionResponse> listarPorObra(Long obraId, boolean soloFuturas, Pageable pageable) {
         log.info("Listando funciones de obra id: {}", obraId);
         Page<Funcion> funciones = soloFuturas
@@ -33,6 +34,7 @@ public class FuncionService {
         return funciones.map(this::toResponse);
     }
 
+    @Transactional(readOnly = true)
     public FuncionResponse obtenerPorId(Long id) {
         log.info("Obteniendo función con id: {}", id);
         return toResponse(findFuncionOrThrow(id));
@@ -87,6 +89,14 @@ public class FuncionService {
     public void eliminar(Long id) {
         log.info("Eliminando función con id: {}", id);
         Funcion funcion = findFuncionOrThrow(id);
+
+        Integer boletasOcupadas = funcionRepository.calcularBoletasOcupadas(id);
+        if (boletasOcupadas > 0) {
+            throw new BusinessException(
+                    "No se puede eliminar la función porque tiene " +
+                    boletasOcupadas + " boleta(s) reservada(s) activas");
+        }
+
         funcionRepository.delete(funcion);
     }
 
