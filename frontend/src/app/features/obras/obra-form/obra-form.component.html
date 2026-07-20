@@ -1,0 +1,92 @@
+<div class="form-container">
+
+  <div class="page-header">
+    <button mat-icon-button (click)="cancelar()" matTooltip="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-title">
+      <mat-icon>{{ esEdicion ? 'edit' : 'add_circle' }}</mat-icon>
+      <h1>{{ esEdicion ? 'Editar Obra' : 'Nueva Obra' }}</h1>
+    </div>
+  </div>
+
+  <mat-card class="form-card">
+
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <mat-card-content *ngIf="!loading">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput formControlName="titulo" placeholder="Nombre de la obra"/>
+          <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+            El título es obligatorio
+          </mat-error>
+          <mat-error *ngIf="form.get('titulo')?.hasError('maxlength')">
+            El título no puede superar los 200 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput
+                    formControlName="descripcion"
+                    rows="4"
+                    placeholder="Descripción de la obra">
+          </textarea>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Género</mat-label>
+            <mat-icon matPrefix>theater_comedy</mat-icon>
+            <input matInput formControlName="genero" placeholder="Drama, Comedia, Musical..."/>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Duración (minutos)</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput
+                   type="number"
+                   formControlName="duracionMinutos"
+                   placeholder="120"/>
+            <mat-error *ngIf="form.get('duracionMinutos')?.hasError('min')">
+              La duración debe ser mayor a 0
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="toggle-field">
+          <mat-slide-toggle formControlName="activa" color="primary">
+            Obra activa
+          </mat-slide-toggle>
+          <span class="toggle-hint">Las obras inactivas no aparecen en el catálogo</span>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button
+                  type="button"
+                  (click)="cancelar()">
+            Cancelar
+          </button>
+          <button mat-flat-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="form.invalid || guardando">
+            <mat-spinner diameter="20" *ngIf="guardando"></mat-spinner>
+            <span *ngIf="!guardando">
+              {{ esEdicion ? 'Actualizar' : 'Crear' }}
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>

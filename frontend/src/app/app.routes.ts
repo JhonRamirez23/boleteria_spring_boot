@@ -14,10 +14,44 @@ export const routes: Routes = [
       import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
-    path: 'dashboard',
+    path: '',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      import('./features/layout/layout.component').then(m => m.LayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'obras',
+        loadComponent: () =>
+          import('./features/obras/obras-list/obra-list.component').then(m => m.ObrasListComponent)
+      },
+      {
+        path: 'obras/nueva',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/obras/obra-form/obra-form.component').then(m => m.ObraFormComponent)
+      },
+      {
+        path: 'obras/editar/:id',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/obras/obra-form/obra-form.component').then(m => m.ObraFormComponent)
+      },
+      // {
+      //   path: 'funciones',
+      //   loadComponent: () =>
+      //     import('./features/funciones/funciones-list/funciones-list.component').then(m => m.FuncionesListComponent)
+      // },
+      // {
+      //   path: 'reservas',
+      //   loadComponent: () =>
+      //     import('./features/reservas/reservas-list/reservas-list.component').then(m => m.ReservasListComponent)
+      // },
+    ]
   },
   {
     path: '**',
