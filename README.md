@@ -28,7 +28,7 @@ Tener instalado antes de comenzar:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/JhonRamirez23/prueba_codesa.git
 cd prueba_codesa
 ```
 
