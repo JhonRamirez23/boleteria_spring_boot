@@ -1,0 +1,89 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <mat-icon>confirmation_number</mat-icon>
+    <h2>Reservar Boletas</h2>
+  </div>
+
+  <mat-dialog-content>
+
+    <div class="funcion-info">
+      <div class="info-item">
+        <mat-icon>movie</mat-icon>
+        <div>
+          <span class="label">Obra</span>
+          <span class="value">{{ funcion.obraTitulo }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>schedule</mat-icon>
+        <div>
+          <span class="label">Fecha y hora</span>
+          <span class="value">{{ funcion.fechaHora }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>room</mat-icon>
+        <div>
+          <span class="label">Sala</span>
+          <span class="value">{{ funcion.sala }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>people</mat-icon>
+        <div>
+          <span class="label">Disponibles</span>
+          <span class="value disponibles">{{ funcion.aforoDisponible }} boletas</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>payments</mat-icon>
+        <div>
+          <span class="label">Precio por boleta</span>
+          <span class="value">{{ formatearPrecio(funcion.precio) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cantidad de boletas</mat-label>
+        <mat-icon matPrefix>confirmation_number</mat-icon>
+        <input matInput
+               type="number"
+               formControlName="cantidad"
+               [min]="1"
+               [max]="funcion.aforoDisponible"/>
+        <mat-error *ngIf="form.get('cantidad')?.hasError('required')">
+          La cantidad es obligatoria
+        </mat-error>
+        <mat-error *ngIf="form.get('cantidad')?.hasError('min')">
+          La cantidad mínima es 1
+        </mat-error>
+        <mat-error *ngIf="form.get('cantidad')?.hasError('max')">
+          Solo hay {{ funcion.aforoDisponible }} boletas disponibles
+        </mat-error>
+      </mat-form-field>
+    </form>
+
+    <div class="total-estimado" *ngIf="form.valid">
+      <span class="label">Total estimado:</span>
+      <span class="valor">{{ formatearPrecio(totalEstimado) }}</span>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-stroked-button (click)="cancelar()">
+      Cancelar
+    </button>
+    <button mat-flat-button
+            color="primary"
+            (click)="onSubmit()"
+            [disabled]="form.invalid || guardando">
+      <mat-spinner diameter="20" *ngIf="guardando"></mat-spinner>
+      <span *ngIf="!guardando">Confirmar Reserva</span>
+    </button>
+  </mat-dialog-actions>
+
+</div>

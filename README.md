@@ -1,34 +1,109 @@
 # Sistema de Gestión de Boletería
 
-Aplicación web para la gestión de boletería de un teatro de mediana escala. Permite a los usuarios consultar la cartelera de obras y sus funciones, realizar reservas de boletas, y a los administradores gestionar la programación del teatro y validar las reservas.
+Aplicación web para la gestión de boletería de un teatro de mediana escala. Permite consultar la cartelera de obras y sus funciones, realizar reservas de boletas, y a los administradores gestionar la programación del teatro y validar las reservas.
 
-## Tabla de contenidos
+## Tecnologías
 
-🚧 *Se completará al fijar todas las secciones.*
-
-## Stack tecnológico
-
-- Frontend: Angular + Angular Material
-- Backend: Spring Boot 3.5.16 (Java 17)
-- Base de datos: PostgreSQL 16
-- Migraciones: Flyway
-- Build backend: Maven
-- Autenticación: JWT + Spring Security
-- Contenedores: Docker / Docker Compose
-
+- **Frontend:** Angular 17 + Angular Material
+- **Backend:** Spring Boot 3.5.16 (Java 17)
+- **Base de datos:** PostgreSQL 16
+- **Migraciones:** Flyway
+- **Autenticación:** JWT + Spring Security
+- **Build:** Maven
 
 ## Requisitos previos
 
-Para ejecutar el proyecto se necesita tener instalado:
+Tener instalado antes de comenzar:
 
 - **Java 17** (JDK)
-- **Docker** y Docker Compose
-- **Node.js** y Angular CLI (para el frontend)
+- **Node.js 18** o superior
+- **Angular CLI 17** (`npm install -g @angular/cli@17`)
+- **Docker** (para la base de datos PostgreSQL)
 - **Git**
 
-Maven no requiere instalación global: el proyecto incluye el Maven Wrapper (`./mvnw`).
+> **Nota:** Maven no requiere instalación. El proyecto incluye el Maven Wrapper (`./mvnw`).
 
-## Estructura del repositorio
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/JhonRamirez23/prueba_codesa.git
+cd prueba_codesa
+```
+
+### 2. Levantar la base de datos
+
+Levantar el contenedor de PostgreSQL desde la raíz del proyecto:
+
+```bash
+docker compose up -d
+```
+
+Esto crea una instancia de PostgreSQL 16 con la base de datos `prueba` en el puerto `5432`.
+
+> **Nota:** Para usar una instancia propia de PostgreSQL en lugar de Docker, crear una base de datos llamada `prueba` y ajustar las credenciales en `backend/src/main/resources/application.properties`. Flyway se encarga de crear todas las tablas automáticamente al arrancar el backend.
+
+### 3. Arrancar el backend
+
+**En Linux/Mac:**
+
+```bash
+cd backend
+chmod +x mvnw
+./mvnw spring-boot:run
+```
+
+**En Windows:**
+
+```bash
+cd backend
+mvnw spring-boot:run
+```
+
+El backend queda disponible en `http://localhost:8080`.
+
+> **Nota:** `chmod +x mvnw` solo es necesario la primera vez en Linux/Mac.
+
+Al arrancar, el sistema automáticamente:
+
+- Ejecuta las migraciones de Flyway y crea todas las tablas.
+- Crea los usuarios de prueba (ADMIN y USER) si no existen.
+
+### 4. Arrancar el frontend
+
+Abrir otra terminal y ejecutar:
+
+```bash
+cd frontend
+npm install
+ng serve
+```
+
+El frontend queda disponible en `http://localhost:4200`.
+
+### 5. Acceder a la aplicación
+
+Abrir `http://localhost:4200` en el navegador e iniciar sesión con alguna de las credenciales de prueba.
+
+## Credenciales de prueba
+
+```text
+ADMIN → admin@codesa.com  |  Admin1234
+USER  → user@codesa.com   |  User1234
+```
+
+## Roles y permisos
+
+```text
+USER   → Consultar obras y funciones, crear reservas,
+         ver y cancelar sus propias reservas.
+
+ADMIN  → Todo lo anterior + gestionar obras y funciones,
+         confirmar y rechazar reservas.
+```
+
+## Estructura del proyecto
 
 ```text
 prueba_codesa/
@@ -40,81 +115,30 @@ prueba_codesa/
 └── README.md
 ```
 
-El backend está organizado por **dominios** (monolito modular), manteniendo la arquitectura en capas (Controller → Service → Repository) dentro de cada dominio:
+## Documentación adicional
 
-```text
-com.codesa.prueba
-├── auth/          → autenticación, usuarios y roles
-├── obras/         → gestión de obras
-├── funciones/     → gestión de funciones (presentaciones)
-├── reservas/      → flujo de reservas
-└── shared/        → configuración, seguridad y manejo de excepciones transversal
-```
+- **Script SQL:** `database/schema.sql`
+- **Diagrama entidad-relación:** `docs/ER.png`
+- **Colección Postman:** `docs/postman_collection.json`
 
-## Configuración y ejecución
-
-### Base de datos
-
-Levantar el contenedor de PostgreSQL desde la raíz del proyecto:
-
-```bash
-docker compose up -d
-```
-
-Esto crea una instancia de PostgreSQL 16 con la base de datos `prueba` en el puerto `5432`. Las migraciones de Flyway se ejecutan automáticamente al arrancar el backend.
-
-### Backend
-
- *Pendiente.*
-
-### Frontend
-
- *Pendiente.*
-
-## Modelo de datos
-
-El modelo relacional se compone de cinco entidades:
-
-- **roles** — catálogo de roles del sistema (USER, ADMIN).
-- **usuarios** — usuarios registrados; cada uno asociado a un rol.
-- **obras** — obras de teatro disponibles en la cartelera.
-- **funciones** — presentaciones de una obra en una fecha y hora específicas, con aforo y precio.
-- **reservas** — reservas de boletas que realiza un usuario sobre una función.
-
-**Flujo de estados de una reserva:**
-
-`PENDIENTE` → `CONFIRMADA` | `RECHAZADA` | `CANCELADA`
-
-Una reserva nace en estado PENDIENTE cuando el usuario la crea, apartando el cupo correspondiente. El administrador puede confirmarla o rechazarla; el usuario puede cancelar su propia reserva pendiente. Las reservas en estado PENDIENTE y CONFIRMADA descuentan aforo disponible; las RECHAZADA y CANCELADA lo liberan.
-
-Diagrama entidad-relación: *Pendiente (docs/).*
-
-## Autenticación y roles
-
- *Pendiente.*
-
-## API / Endpoints
-
- *Pendiente (ver colección Postman en docs/).*
-
-## Credenciales de prueba
-
- *Pendiente.*
+> **Nota:** Importar la colección Postman junto con el environment para probar los endpoints.
 
 ## Pruebas
 
- *Pendiente.*
+**En Linux/Mac:**
 
-## Decisiones de diseño
+```bash
+cd backend
+./mvnw test
+```
 
- *Pendiente.* Sección donde se justificarán las decisiones arquitectónicas principales: organización por dominios (monolito modular), uso de Flyway para migraciones versionadas, y el modelo de estados de las reservas.
+**En Windows:**
 
-## Entregables
+```bash
+cd backend
+mvnw test
+```
 
-- [x] Repositorio Git con historial de commits
-- [ ] Proyecto backend completo
-- [ ] Proyecto frontend completo
-- [ ] Script SQL
-- [ ] README con instrucciones de instalación y ejecución
-- [ ] Diagrama entidad-relación
-- [ ] Colección Postman
+## Documentación técnica
+
+Consultar el archivo [`docs/TECHNICAL.md`](docs/TECHNICAL.md) para detalles sobre la arquitectura, el modelo de datos, los endpoints de la API y las decisiones de diseño.

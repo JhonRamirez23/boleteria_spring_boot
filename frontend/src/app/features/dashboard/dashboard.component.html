@@ -1,0 +1,23 @@
+<div class="content-area">
+  <div class="welcome-card">
+    <div class="welcome-icon">
+      <mat-icon>theater_comedy</mat-icon>
+    </div>
+    <h2>Bienvenido, {{ usuario?.email }}</h2>
+    <p>Selecciona una opción del menú para comenzar</p>
+    <div class="stats-grid">
+      <div class="stat-card" routerLink="/obras">
+        <mat-icon>movie</mat-icon>
+        <span>Obras</span>
+      </div>
+      <div class="stat-card" routerLink="/funciones">
+        <mat-icon>event</mat-icon>
+        <span>Funciones</span>
+      </div>
+      <div class="stat-card" routerLink="/reservas">
+        <mat-icon>confirmation_number</mat-icon>
+        <span>Reservas</span>
+      </div>
+    </div>
+  </div>
+</div>

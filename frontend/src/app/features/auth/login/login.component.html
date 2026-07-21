@@ -1,0 +1,87 @@
+<div class="login-container">
+  <mat-card class="login-card">
+
+    <div class="login-header">
+
+      <div class="logo-wrapper">
+        <mat-icon>theater_comedy</mat-icon>
+      </div>
+
+      <h1>Sistema de Boletería</h1>
+      <p>Inicia sesión para continuar</p>
+
+    </div>
+
+    <mat-card-content>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo electrónico</mat-label>
+
+          <mat-icon matPrefix>email</mat-icon>
+
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email"
+          />
+
+          <mat-error>{{ emailError }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+
+          <mat-label>Contraseña</mat-label>
+
+          <mat-icon matPrefix>lock</mat-icon>
+
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+          >
+            <mat-icon>
+              {{ hidePassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
+
+          <mat-error>{{ passwordError }}</mat-error>
+
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="login-btn full-width"
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+        >
+
+          <mat-spinner
+            diameter="20"
+            *ngIf="loading">
+          </mat-spinner>
+
+          <span *ngIf="!loading">
+            Iniciar sesión
+          </span>
+
+        </button>
+
+      </form>
+
+    </mat-card-content>
+
+  </mat-card>
+</div>

@@ -1,0 +1,135 @@
+<div class="funciones-container">
+
+  <div class="page-header">
+    <div class="header-title">
+      <mat-icon>event</mat-icon>
+      <h1>Funciones</h1>
+    </div>
+    <button mat-flat-button
+            color="primary"
+            routerLink="/funciones/nueva"
+            *ngIf="isAdmin">
+      <mat-icon>add</mat-icon>
+      Nueva Función
+    </button>
+  </div>
+
+  <mat-card class="filter-card">
+    <mat-form-field appearance="outline" class="obra-select">
+      <mat-label>Selecciona una obra</mat-label>
+      <mat-icon matPrefix>movie</mat-icon>
+      <mat-select [(ngModel)]="obraSeleccionada" (ngModelChange)="onObraChange()">
+        <mat-option *ngFor="let obra of obras" [value]="obra.id">
+          {{ obra.titulo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+
+  <mat-card class="table-card">
+
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+      <table mat-table [dataSource]="dataSource" class="funciones-table">
+
+        <ng-container matColumnDef="obra">
+          <th mat-header-cell *matHeaderCellDef>Obra</th>
+          <td mat-cell *matCellDef="let funcion">
+            <div class="obra-cell">
+              <span class="obra-titulo">{{ funcion.obraTitulo }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaHora">
+          <th mat-header-cell *matHeaderCellDef>Fecha y Hora</th>
+          <td mat-cell *matCellDef="let funcion">
+            <div class="fecha-cell">
+              <mat-icon>schedule</mat-icon>
+              {{ funcion.fechaHora }}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sala">
+          <th mat-header-cell *matHeaderCellDef>Sala</th>
+          <td mat-cell *matCellDef="let funcion">{{ funcion.sala }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="aforo">
+          <th mat-header-cell *matHeaderCellDef>Aforo</th>
+          <td mat-cell *matCellDef="let funcion">
+            <div class="aforo-cell">
+              <span class="disponible">{{ funcion.aforoDisponible }}</span>
+              <span class="separador">/</span>
+              <span class="total">{{ funcion.aforoTotal }}</span>
+              <span class="label">disponibles</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="precio">
+          <th mat-header-cell *matHeaderCellDef>Precio</th>
+          <td mat-cell *matCellDef="let funcion">
+            <mat-chip class="chip-precio">
+              {{ formatearPrecio(funcion.precio) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let funcion">
+
+            <div class="acciones" *ngIf="isAdmin">
+              <button mat-icon-button
+                      color="primary"
+                      [routerLink]="['/funciones/editar', funcion.id]"
+                      matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="warn"
+                      (click)="eliminar(funcion)"
+                      matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <button mat-flat-button
+                    color="primary"
+                    *ngIf="!isAdmin && funcion.aforoDisponible > 0"
+                    (click)="reservar(funcion)"
+                    class="btn-reservar">
+              <mat-icon>confirmation_number</mat-icon>
+              Reservar
+            </button>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+            No hay funciones disponibles para esta obra
+          </td>
+        </tr>
+
+      </table>
+
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </mat-card>
+</div>
