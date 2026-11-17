@@ -28,7 +28,7 @@ Tener instalado antes de comenzar:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/JhonRamirez23/prueba_codesa.git
+git clone https://github.com/JhonRamirez23/boleteria_spring_boot.git
 cd prueba_codesa
 ```
 
